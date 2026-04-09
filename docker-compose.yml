@@ -1,7 +1,7 @@
 services:
   ministack:
     build: .
-    image: nahuelnucera/ministack:latest
+    image: ghcr.io/mangoye/ministack:latest
     container_name: ministack
     ports:
       - "4566:4566"
