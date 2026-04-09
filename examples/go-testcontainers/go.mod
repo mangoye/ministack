@@ -1,4 +1,4 @@
-module github.com/nahuelnucera/ministack/examples/go-testcontainers
+module github.com/mangoye/ministack/examples/go-testcontainers
 
 go 1.23.0
 

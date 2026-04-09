@@ -1,19 +1,41 @@
-# MiniStack — Free, Open-Source Local AWS Emulator
+# Ministack for AI — Fork with Bedrock & Knowledge Base
 
-> **LocalStack is no longer free.** MiniStack is a fully open-source, zero-cost drop-in replacement.
-> Single port · No account · No license key · No telemetry · Just AWS APIs, locally.
+> **Fork of [MiniStack](https://github.com/Nahuel990/ministack) (v1.1.11)** — adds **Amazon Bedrock** and **Bedrock Knowledge Base** services (preview).
 
-![GitHub release](https://img.shields.io/github/v/release/Nahuel990/ministack)
-![Build](https://img.shields.io/github/actions/workflow/status/Nahuel990/ministack/ci.yml?branch=master)
-![Docker Pulls](https://img.shields.io/docker/pulls/nahuelnucera/ministack)
-![Docker Image Size](https://img.shields.io/docker/image-size/nahuelnucera/ministack/latest)
-![License](https://img.shields.io/github/license/Nahuel990/ministack)
+| | Version |
+|---|---|
+| **MiniStack (upstream)** | `1.1.11` — [original repo](https://github.com/Nahuel990/ministack) |
+| **Ministack for AI** | `1.1.11` — this fork |
+
+![Build](https://img.shields.io/github/actions/workflow/status/mangoye/ministack/ci.yml?branch=master)
+![License](https://img.shields.io/github/license/mangoye/ministack)
 ![Python](https://img.shields.io/badge/python-3.12-blue)
-![GitHub stars](https://img.shields.io/github/stars/Nahuel990/ministack)
 
 <p align="center">
   <img src="ministack1.png" alt="MiniStack in action" width="700"/>
 </p>
+
+---
+
+## ⚠️ Important Notice
+
+**This fork is a personal project in preview.** The Bedrock services (Control Plane, Runtime, Agent, Agent Runtime / Knowledge Base) were developed for my own needs and are **not intended for production use**.
+
+**For general use, prefer the original MiniStack** — it is lighter, faster, better maintained, and more up to date:
+
+👉 **[github.com/Nahuel990/ministack](https://github.com/Nahuel990/ministack)**
+
+---
+
+## What This Fork Adds
+
+On top of MiniStack `1.1.11`, this fork includes:
+
+- **Bedrock** (Control Plane) — `ListFoundationModels`, `GetFoundationModel`, `CreateGuardrail`, etc.
+- **Bedrock Runtime** — `Converse`, `InvokeModel`, `ApplyGuardrail`, `CountTokens` via **LiteLLM** → **Ollama**
+- **Bedrock Agent** — Agents, Knowledge Bases, Data Sources, Ingestion Jobs (S3 → **pgvector**)
+- **Bedrock Agent Runtime** — `Retrieve`, `RetrieveAndGenerate` (RAG), `Rerank`
+- Full stack: **Ollama** (local LLM) + **LiteLLM** (proxy) + **pgvector** (vector DB)
 
 ---
 
@@ -23,7 +45,8 @@ LocalStack recently moved its core services behind a paid plan. If you relied on
 
 - **39 AWS services** emulated on a single port (4566)
 - **Drop-in compatible** — works with `boto3`, AWS CLI, Terraform, CDK, Pulumi, any SDK
-- **Real infrastructure** — RDS spins up actual Postgres/MySQL containers, ElastiCache spins up real Redis, Athena runs real SQL via DuckDB, ECS runs real Docker containers, Bedrock runs local LLMs via Ollama
+- **Real infrastructure** — RDS spins up actual Postgres/MySQL containers, ElastiCache spins up real Redis, Athena runs real SQL via DuckDB, ECS runs real Docker containers
+- **Bedrock AI stack** (this fork) — local LLM via Ollama, RAG via pgvector
 - **Tiny footprint** — ~180MB image, ~46MB RAM at idle vs LocalStack's ~1GB image and ~500MB RAM
 - **Fast startup** — under 2 seconds
 - **MIT licensed** — use it, fork it, contribute to it
@@ -33,24 +56,23 @@ LocalStack recently moved its core services behind a paid plan. If you relied on
 ## Quick Start
 
 ```bash
-# Option 1: PyPI (simplest)
-pip install ministack
-ministack
-# Runs on http://localhost:4566 — use GATEWAY_PORT=XXXX to change
+# Option 1: Docker (recommended for this fork with Bedrock)
+docker compose up -d
+# Starts ministack + redis + pgvector + ollama + litellm
 
-# Option 2: Docker Hub
-docker run -p 4566:4566 nahuelnucera/ministack
+# Option 2: Docker image only
+docker run -p 4566:4566 ghcr.io/mangoye/ministack
 
 # Option 3: Clone and build
-git clone https://github.com/Nahuel990/ministack
+git clone https://github.com/mangoye/ministack
 cd ministack
 docker compose up -d
 
-# Verify (any option)
+# Verify
 curl http://localhost:4566/_ministack/health
 ```
 
-That's it. No account, no API key, no sign-up.
+> **For MiniStack without Bedrock**, use the original version: `pip install ministack` or `docker run -p 4566:4566 nahuelnucera/ministack` — see [original repo](https://github.com/Nahuel990/ministack).
 
 ---
 
@@ -477,7 +499,7 @@ docker run -p 4566:4566 \
   -e PERSIST_STATE=1 \
   -e STATE_DIR=/data/ministack-state \
   -v /tmp/ministack-data:/data \
-  nahuelnucera/ministack
+  ghcr.io/mangoye/ministack
 ```
 
 ### Lambda Warm Starts
@@ -717,6 +739,15 @@ PRs welcome. The codebase is intentionally simple — each service is a single s
 4. Add a fixture to `tests/conftest.py` and tests to `tests/test_services.py`
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for a full walkthrough.
+
+---
+
+## Upstream
+
+This project is a fork of **[MiniStack](https://github.com/Nahuel990/ministack)** by [Nahuel Nucera](https://github.com/Nahuel990), based on version `1.1.11`.
+
+- **MiniStack upstream**: [github.com/Nahuel990/ministack](https://github.com/Nahuel990/ministack) — original version, lighter, better maintained
+- **This fork**: [github.com/mangoye/ministack](https://github.com/mangoye/ministack) — adds Bedrock services (preview)
 
 ---
 

@@ -52,9 +52,9 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/Nahuel990/ministack"
-Repository = "https://github.com/Nahuel990/ministack"
-Issues = "https://github.com/Nahuel990/ministack/issues"
+Homepage = "https://github.com/mangoye/ministack"
+Repository = "https://github.com/mangoye/ministack"
+Issues = "https://github.com/mangoye/ministack/issues"
 
 [project.scripts]
 ministack = "ministack.app:main"
